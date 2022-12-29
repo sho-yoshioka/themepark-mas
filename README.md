@@ -1,7 +1,77 @@
 # themepark-mas
 
-## 20221226 初期ファイル作成
-* Device.java
-* Node.java
-* ThemePark.java
-* User.java
+---
+
+## 20221226 
+### 変更履歴
+* 初期ファイル作成
+    * Device.java
+    * Node.java
+    * ThemePark.java
+    * User.java
+
+---
+
+## 20221229
+### 備忘録
+* [マークダウン記法](https://qiita.com/sano1202/items/64593e8e981e8d6439d3)
+.mdファイルに用いるタグのサンプル
+* [ダイクストラ法](https://www.techiedelight.com/ja/single-source-shortest-paths-dijkstras-algorithm/)
+優先キューをヒープで実装したサンプルプログラム
+* [ラムダ形式と関数型インターフェース](https://qiita.com/sano1202/items/64593e8e981e8d6439d3)
+    * ジェネリクス
+        * ``<Integer>, <String>`` など
+    * プリミティブ
+        * ``int, double``など
+    * <? super クラス名>
+        * ?はワイルドカード型
+        * <クラス名>のスーパクラスの型
+        * <? extends Person> ならPersonクラスを継承するクラス
+
+
+> 3-1. Collections.sort(List<T>, Comparator<? super T>)
+> ソートの方法はオブジェクトの種類や状況によって異なります。
+> 例えば数値を並べ替える場合でも、単純な昇順だったり、絶対値の昇順だったりします。
+どちらのソートも実現するためには数値の比較処理を動的に切り替える必要があります。
+そのため、Collections.sortは比較の処理自体を受け取る仕組みになっています。
+
+~~~Java
+int[] numbers = {-1, 2, 0, -3, 8};
+
+List<Integer> numbersList = new ArrayList<>();
+
+for(int n : numbers) {
+  numbersList.add(n);
+}
+
+Collections.sort(numbersList, 【ソート方法】);
+~~~
+> 【ソート方法】にはComparatorインターフェースのcompare(s1, s2)メソッドを実装したインスタンスを指定します。
+
+> 実際にラムダ式を用いてソートしてみましょう。
+
+~~~java
+Collections.sort(numbersList, (a, b) -> { return a - b; });
+
+for(Integer n : numbersList) {
+  System.out.print(n + " ");
+}
+// -3 -1 0 2 8
+~~~
+
+以下の記すコードのうち`node -> node.weight`でつまづいた
+
+```java:ThemeParkMap.java
+minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));	
+//以下のラムダ形式だと思う。おそらくweightの値の昇順のComparator
+		//TotalFunction<Node> tf = (node) -> {return node.weight}
+		//@Override
+		//int applyAsInt(Node) {
+		//	return node.weight
+		//}
+```
+
+### 変更履歴
+* ファイル作成
+    * setting/ThemeParkGraph.java
+        * 初期設定テーマパークグラフでダイクストラ法を実装しているクラス。ダイクストラは委譲を受ける予定
