@@ -75,3 +75,15 @@ minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));
 * ファイル作成
     * setting/ThemeParkGraph.java
         * 初期設定テーマパークグラフでダイクストラ法を実装しているクラス。ダイクストラは委譲を受ける予定
+        
+---
+
+## 20230101
+### 備忘録
+* staticなメソッドはオーバライドできない。
+クラスに固有のためポリモーフィズムを実現できないから意味がない
+
+### 変更履歴
+* ThemeParkGraph.javaのdijkstara()とgetRoute()を他クラス（Main)で定義した。
+    * あくまでグラフ構造と始点を引数で与えればいいので、Graphクラスで定義する必要はない。実際にルート探索するクラスで定義すればいい。
+    * ただしGraph, Edge, Nodeをクラス宣言するか、publicか同パッケージにしないとだめそう。
