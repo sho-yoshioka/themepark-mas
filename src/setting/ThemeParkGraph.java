@@ -8,23 +8,10 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class ThemeParkGraph extends Graph{
-	//0 : 入口
-	//1~10 : アトラクション
-	//11~19 : 道路
-	//20 : 出口
-	public static final int GRAPH_SIZE = 21;
-	
-	//シングルトンパターン
-	private static ThemeParkGraph themeParkGraph = new ThemeParkGraph();
-	
 	//コンストラクタ生成時に
 	//初期化してしまう。
-	private ThemeParkGraph() {
-		super(initEdge(), GRAPH_SIZE);
-	}
-	
-	public static ThemeParkGraph getSingleton() {
-		return themeParkGraph;
+	public ThemeParkGraph() {
+		super(initEdge(), SystemConst.GRAPH_SIZE);
 	}
 	
 	//グラフ構造を帰る場合はここを変えればいい
@@ -174,10 +161,10 @@ class Main {
 	}
 	
 	public static void main(String[] args) {
-		ThemeParkGraph themeParkGraph = ThemeParkGraph.getSingleton();
+		ThemeParkGraph themeParkGraph = new ThemeParkGraph();
 		
-		for(int source = 0; source < ThemeParkGraph.GRAPH_SIZE; source++) {
-			dijkstra(themeParkGraph, source, 20, ThemeParkGraph.GRAPH_SIZE);
+		for(int source = 0; source < SystemConst.GRAPH_SIZE; source++) {
+			dijkstra(themeParkGraph, source, 20, SystemConst.GRAPH_SIZE);
 		}
 	}
 }
