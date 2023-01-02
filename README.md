@@ -97,6 +97,8 @@ minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));
     * フィールドはpublic static final
 * シングルトンは万能ではない
     * ユニットテストがやりにくいときがある。（初期状態にもどらないせい）
+* スーパークラスのprivateフィールドは子クラスで値変更できない（protectedにする)
+* 抽象クラスもコンストラクタは定義できる(superで呼び出す必要がある)
 ### 変更履歴
 * シングルトンパターンをやめた
     * ThemeParkGraph.java
@@ -104,3 +106,5 @@ minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));
 * 定数クラスを作成
     * setting/SystemConst.java
     * それに伴いThemeParkGraph.javaの定数削除
+* ThemeParkNodeに関するクラスを追加
+* Nodeの生成はFactoryクラスで作る予定
