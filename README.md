@@ -87,3 +87,14 @@ minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));
 * ThemeParkGraph.javaのdijkstara()とgetRoute()を他クラス（Main)で定義した。
     * あくまでグラフ構造と始点を引数で与えればいいので、Graphクラスで定義する必要はない。実際にルート探索するクラスで定義すればいい。
     * ただしGraph, Edge, Nodeをクラス宣言するか、publicか同パッケージにしないとだめそう。
+    
+---
+
+## 20230102
+### 備忘録
+* スーパークラスのprivateフィールドは子クラスで値変更できない（protectedにする)
+* 抽象クラスもコンストラクタは定義できる(superで呼び出す必要がある)
+
+### 変更履歴
+* ThemeParkNodeに関するクラスを追加
+* Nodeの生成はFactoryクラスで作る予定
