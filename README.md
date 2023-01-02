@@ -87,3 +87,20 @@ minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));
 * ThemeParkGraph.javaのdijkstara()とgetRoute()を他クラス（Main)で定義した。
     * あくまでグラフ構造と始点を引数で与えればいいので、Graphクラスで定義する必要はない。実際にルート探索するクラスで定義すればいい。
     * ただしGraph, Edge, Nodeをクラス宣言するか、publicか同パッケージにしないとだめそう。
+    
+---
+
+## 20230102
+### 備忘録
+* 定数はクラスにまとめておくのも一つの方法
+    * コンストラクタはprivate
+    * フィールドはpublic static final
+* シングルトンは万能ではない
+    * ユニットテストがやりにくいときがある。（初期状態にもどらないせい）
+### 変更履歴
+* シングルトンパターンをやめた
+    * ThemeParkGraph.java
+    * ThemePark.java
+* 定数クラスを作成
+    * setting/SystemConst.java
+    * それに伴いThemeParkGraph.javaの定数削除
