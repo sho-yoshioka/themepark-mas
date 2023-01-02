@@ -11,14 +11,18 @@ public class Entrance extends ThemeParkNode {
 
 	@Override
 	public boolean hasEmpty() {
-		// TODO 自動生成されたメソッド・スタブ
-		return false;
+		System.exit(1);
+		return true;
 	}
 
 	@Override
-	public boolean canServe() {
-		// TODO 自動生成されたメソッド・スタブ
-		return false;
+	public boolean canServe(Visitor visitor) {
+		return true;
+	}
+	@Override
+	public void finishService() {
+		//何もしない
+		
 	}
 
 }

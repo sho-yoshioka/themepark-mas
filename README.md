@@ -108,3 +108,27 @@ minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));
     * それに伴いThemeParkGraph.javaの定数削除
 * ThemeParkNodeに関するクラスを追加
 * Nodeの生成はFactoryクラスで作る予定
+
+---
+
+## 20230103(attractionfeature)
+### 備忘録
+Visitorの行動とNodeの振る舞いを開発中
+### 変更履歴
+* ThemeParkNode.canServe()に引数でVisitor
+* Attraction.java
+    * registerQueue(),finishQueue()追加
+    * operationでアトラクションが何人稼働しているかの管理
+ 
+* EnumStatus.java
+    * visitorの行動状態の列挙
+    
+* Visitor.java
+     * act()の実装
+    
+### TODO
+* visitorのact()は本来visitorIdによらずランダムに実行するべき
+* アトラクションのユーザの入れ替えは本来そろえるべき？
+    * visitorId昇順で処理していることでうまくばらけてる気もする
+    * e.g. id=10の人がremainingTime==0のとき id=1の人はoperation>=capacityより受けられないが id>10の人が受ける時にはoperation--+されてる
+    * 1stepしかかわらんから大きな問題ではない

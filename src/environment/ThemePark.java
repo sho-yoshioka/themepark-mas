@@ -8,19 +8,24 @@ import setting.ThemeParkGraph;
 
 public class ThemePark {
 	private final ThemeParkGraph themeParkGraph;
-	private NodeFactory nodeFactory;
 	private List<ThemeParkNode> themeParkNodes;
 	private List<Visitor> visitors;
 	
-	private ThemePark(ThemeParkGraph tpg, List<ThemeParkNode> tpn, List<Visitor> visitors) {
-		
+	private NodeFactory nodeFactory;
+	
+	private int simTime;
+	
+	
+	public ThemePark(ThemeParkGraph themeParkGraph, List<ThemeParkNode> themeParkNodes, List<Visitor> visitors) {
+		this.themeParkGraph = themeParkGraph;
+		this.themeParkNodes = themeParkNodes;
+		this.visitors = visitors;
 	}
-	public List<ThemeParkNode> createNode() {
-		List<ThemeParkNode> tpNodes = new ArrayList<ThemeParkNode>();
-		tpNodes = nodeFactory.initNode();
-		return tpNodes;
+	
+	public int getSimTime() {
+		return simTime;
 	}
-	public List<Visitor> createVisitor(){
-		
+	public ThemeParkNode getNodeAt(int index) {
+		return themeParkNodes.get(index);
 	}
 }

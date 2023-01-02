@@ -15,8 +15,12 @@ public class Road extends ThemeParkNode {
 	}
 
 	@Override
-	public boolean canServe() {
+	public boolean canServe(Visitor visitor) {
 		return true;
+	}
+	@Override
+	public void finishService() {
+		//何もしない
 	}
 
 }
