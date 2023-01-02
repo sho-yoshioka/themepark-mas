@@ -15,7 +15,7 @@ public class Road extends ThemeParkNode {
 	}
 
 	@Override
-	public boolean canServer() {
+	public boolean canServe() {
 		return true;
 	}
 

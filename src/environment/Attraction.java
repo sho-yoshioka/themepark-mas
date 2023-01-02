@@ -20,7 +20,7 @@ public class Attraction extends ThemeParkNode {
 	}
 
 	@Override
-	public boolean canServer() {
+	public boolean canServe() {
 		// TODO 自動生成されたメソッド・スタブ
 		return false;
 	}

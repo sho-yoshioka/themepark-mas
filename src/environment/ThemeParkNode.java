@@ -23,6 +23,6 @@ public abstract class ThemeParkNode {
 	
 	public abstract boolean hasEmpty();
 	
-	public abstract boolean canServer();
+	public abstract boolean canServe();
 	
 }

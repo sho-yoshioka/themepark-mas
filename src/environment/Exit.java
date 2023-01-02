@@ -16,7 +16,7 @@ public class Exit extends ThemeParkNode {
 	}
 
 	@Override
-	public boolean canServer() {
+	public boolean canServe() {
 		// TODO 自動生成されたメソッド・スタブ
 		return false;
 	}
