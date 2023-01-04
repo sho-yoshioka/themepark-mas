@@ -11,14 +11,17 @@ public class Exit extends ThemeParkNode {
 
 	@Override
 	public boolean hasEmpty() {
-		// TODO 自動生成されたメソッド・スタブ
-		return false;
+		System.exit(1);
+		return true;
 	}
 
 	@Override
-	public boolean canServer() {
-		// TODO 自動生成されたメソッド・スタブ
+	public boolean canServe(Visitor visitor) {
 		return false;
+	}
+	@Override
+	public void finishService() {
+		//何もしない
 	}
 
 }
