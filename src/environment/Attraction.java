@@ -18,17 +18,21 @@ public class Attraction extends ThemeParkNode {
 
 	@Override
 	public boolean hasEmpty() {
-		if (operation < capacity && waitingQueue.isEmpty()) return true;
-		operation++;
+		if (operation < capacity && waitingQueue.isEmpty()) {
+			operation++;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean canServe(Visitor visitor) {
+		int end = capacity - operation;
 		if (operation >= capacity) return false;
 		//待ち行列の先頭から空き人数分までのサブリストに含まれているか判定
 		List<Visitor> visitors = new ArrayList<>(waitingQueue);
-		if (visitors.subList(0, capacity - operation + 1).contains(visitor)) {
+		if (visitors.size() < end) end = visitors.size();
+		if (visitors.subList(0, end).contains(visitor)) {
 			waitingQueue.remove(visitor);
 			operation++;
 			return true;

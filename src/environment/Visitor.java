@@ -5,7 +5,7 @@ import java.util.List;
 import setting.EnumStatus;
 import setting.SystemConst;
 
-public abstract class Visitor {
+public class Visitor {
 	private EnumStatus actStatus;
 
 	private int startTime;

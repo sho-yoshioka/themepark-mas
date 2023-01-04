@@ -132,3 +132,18 @@ Visitorの行動とNodeの振る舞いを開発中
     * visitorId昇順で処理していることでうまくばらけてる気もする
     * e.g. id=10の人がremainingTime==0のとき id=1の人はoperation>=capacityより受けられないが id>10の人が受ける時にはoperation--+されてる
     * 1stepしかかわらんから大きな問題ではない
+    
+---
+
+## 20230104(f4832ed->)
+### 備忘録
+* Attractionのメソッドを単体Test済み。
+* 即座にサービスを受けるパターンと待ち行列に並ぶパターンの処理は完成
+* JUnitのassertionはテストケースの中に複数あってもオッケー
+
+### 変更履歴
+* AttractionTest.java 作成
+* Attraction.java 完成
+* Visitorを抽象クラスから普通のクラスへ。
+    * テストのためだが、別にabstractでなくていい
+
