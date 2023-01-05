@@ -102,13 +102,11 @@ class Main {
 	}
 	
 	/**
-	 * 
-	 * 
 	 * @param graph 探索するグラフ構造
 	 * @param source 経路探索の出発地点
 	 * @param n グラフの頂点の個数
 	 */
-	public static void dijkstra(Graph graph, int source, int dest, int n) {
+	public static List<Integer> dijkstra(Graph graph, int source, int dest, int n) {
 		PriorityQueue<Node> minHeap;
 		//TotalFunctionインタフェースのapplyAsIntオーバーライドのラムダ形式でTotalFunctionをインスタンス化してるはず(20221227変更履歴を参照)
 		minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));	
@@ -156,16 +154,17 @@ class Main {
 		if (dest != source && dist.get(dest) != Integer.MAX_VALUE) {
 			getRoute(prev, dest, route);
 			System.out.printf("Path (%d -> %d): Minimum cost = %d, Route = %s\n", source, dest, dist.get(dest), route);
-			route.clear();
 		}
+		return route;
 	}
 	
 	public static void main(String[] args) {
 		ThemeParkGraph themeParkGraph = new ThemeParkGraph();
-		
-		for(int source = 0; source < SystemConst.GRAPH_SIZE; source++) {
-			dijkstra(themeParkGraph, source, 20, SystemConst.GRAPH_SIZE);
-		}
+		List<Integer> mainList = new ArrayList<>();
+		mainList = dijkstra(themeParkGraph, 10, 15, SystemConst.GRAPH_SIZE);
+		System.out.println(mainList);
+		mainList = dijkstra(themeParkGraph, 15, 15, SystemConst.GRAPH_SIZE);
+		System.out.println(mainList);
 	}
 }
 	

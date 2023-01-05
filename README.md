@@ -150,7 +150,8 @@ Visitorの行動とNodeの振る舞いを開発中
 ---
     
 ## 20230105(HEAD -> 6cd6d6)
-### 備忘録
+### VisitorFeature
+#### 備忘録
 * Visitorの振る舞いを実装
 * [分布に従う乱数](http://www1.cts.ne.jp/~clab/hsample/Math/Math5.html)
     * rnd < 確率になるまで、繰り返し乱数を発生させた回数
@@ -161,7 +162,7 @@ Visitorの行動とNodeの振る舞いを開発中
     * Listの値をshuffleで並び替えて取得
     * Listは同じリストをshuffleし続けても、新規Listをshuffleしても同じ
     
-### 変更履歴
+#### 変更履歴
 * SystemCalc.java(new)
     * ポアソン分布や階乗などの計算を実装（分布に従う入場はThemePark側で処理すべき）
 * SystemConst.java
@@ -177,9 +178,32 @@ Visitorの行動とNodeの振る舞いを開発中
     * 入場処理のテストを実行
     * 行動のテストはテーマパークがインスタンス化できるようになれば実行
     
-### TODO
+#### TODO
 * VisitorTestのact()実装
 * プランサーチをDeviceクラスに委託する場合の処理
 
----
+
+### planSearchFeature
     
+#### 備忘録
+* [値返却と参照渡し](http://teqspaces.com/Java/6)
+    * ダイクストラ法で得るプランのListを得る時にVisitorのフィールドを参照渡しすべきかで調べた。
+    * ダイクストラ()内でListを定義し、returnするほうがバグが少なそう。(フィールドをそのように使うと追いかけるのが大変)
+    * メソッドの呼び出し元に値を返す2種類の方法
+    * 参照の値渡し: 引数にオブジェクトを渡し、そのオブジェクトに直接設定する方法
+    * 値返却: メソッドの返却値として渡す方法
+    * 値を設定してもらうだけのために参照渡しにするのは「Bad Practice」
+    * 参照渡しは呼び出し元との依存度が高くなる
+    * 参照渡しは、publicメソッドや共通処理として利用するメソッドではなるべく避ける
+    * 長いソースをメソッドに切り出したようなprivateメソッドに留める
+    
+* [Git stash](https://qiita.com/chihiro/items/f373873d5c2dfbd03250)
+    * commitしたくないけど違う作業がしたくなった(ブランチの移動含む)
+
+#### 変更履歴
+* ThemeParkGraph.java
+    * dijkstra()の経路探索をsource->destだけの１回処理にした
+    * dijkstra()の戻り値としてgetRoute()で取得するList<Integer>に変更(void->List<>
+#### TODO
+* 始点がrouteに含まれるため、４回実行してplanを繋げた時に終点(n回)と始点(n+1回)が重複する
+    * n >= 2 のときは返却するList<> routeの[index=0]を消せばいい？
