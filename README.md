@@ -147,3 +147,39 @@ Visitorの行動とNodeの振る舞いを開発中
 * Visitorを抽象クラスから普通のクラスへ。
     * テストのためだが、別にabstractでなくていい
 
+---
+    
+## 20230105(HEAD -> 6cd6d6)
+### 備忘録
+* Visitorの振る舞いを実装
+* [分布に従う乱数](http://www1.cts.ne.jp/~clab/hsample/Math/Math5.html)
+    * rnd < 確率になるまで、繰り返し乱数を発生させた回数
+* [ポアソン分布](https://bellcurve.jp/statistics/course/6984.html)
+    * 単位時間あたりrmd回発生する事象が、単位時間の間にk回起こる確率を返す
+    * 二項分布の期待値npが一定
+* [重複なしの乱数生成](https://www.sejuku.net/blog/22308)
+    * Listの値をshuffleで並び替えて取得
+    * Listは同じリストをshuffleし続けても、新規Listをshuffleしても同じ
+    
+### 変更履歴
+* SystemCalc.java(new)
+    * ポアソン分布や階乗などの計算を実装（分布に従う入場はThemePark側で処理すべき）
+* SystemConst.java
+    * ポアソン分布などの定数を追加、整理
+* Main.java
+    * 重複なし乱数生成にあたり、Listは毎回作っても偏らないかを調査するためにテスト的に使用
+    * 結果として、同じリストを使い続けても毎回作っても同じ
+* Visitor.java
+    * 初期処理として回るアトラクションを決める関数
+    * 初期ポジションを定数に変更
+    * 初期化処理の関数をインターフェース的に定義
+* VisitorTest.java
+    * 入場処理のテストを実行
+    * 行動のテストはテーマパークがインスタンス化できるようになれば実行
+    
+### TODO
+* VisitorTestのact()実装
+* プランサーチをDeviceクラスに委託する場合の処理
+
+---
+    
