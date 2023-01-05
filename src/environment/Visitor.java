@@ -1,29 +1,37 @@
 package environment;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import setting.EnumStatus;
 import setting.SystemConst;
 
 public class Visitor {
+	/** 状態変数act()の条件分岐 */
 	private EnumStatus actStatus;
 
+	/** time系 */
 	private int startTime;
 	private int endTime;
 	private int waitingTime = 0;
 	private int movingTime = 0;
-	private int travelTime;
+	private int travelTime = 0;
 	private int remainingTime;
 	
-	private int position;
+	private int position = -1;
+	private List<Integer> attractionToVisit;
 	private List<Integer> plan;
 	
+	public Visitor() {
+		//
+	}
 	public void act(ThemePark tp) {
 		ThemeParkNode currentNode = tp.getNodeAt(position);
 		switch(actStatus) {
 		case INACTIVE:
 			//入口に出現したらスタート
-			if (position == 0) {
+			if (position == SystemConst.ENTRANCE) {
 				startTime = tp.getSimTime();
 				//次ノードへ移動して前ノードを除く
 				currentNode = move(tp);
@@ -76,6 +84,29 @@ public class Visitor {
 		
 		}
 	}
+	/** 
+	 * 操作側から呼び出すメソッド 
+	 * 分布に従って入場
+	 * */
+	public void enter() {
+		position = SystemConst.ENTRANCE;
+	}
+	
+	public void initVisitor() {
+		setAttractionToVisit();
+	}
+	
+	/**
+	 * 重複なしの乱数をListのshuffleで生成
+	 */
+	private void setAttractionToVisit() {
+		List<Integer> attList = new ArrayList<>();
+		for (int i = 0; i < SystemConst.NUM_OF_ATTRACTION; i++) {
+			attList.add(i + 1);
+		}
+		Collections.shuffle(attList, SystemConst.DECIDE_ATT_RND);
+		attractionToVisit = new ArrayList<>(attList.subList(0, SystemConst.NUM_ATT_TO_VISIT));
+	}
 	/**
 	 * act()で呼び出すprivate関数
 	 * プランが示す次ノードにpositionを移動し、移動前のノードをプランから除く。
@@ -87,5 +118,14 @@ public class Visitor {
 		plan.remove(0);
 		return tp.getNodeAt(position); 
 	}
+	
+	public void planSearch(Device device) {
+		plan = device.searchPlan();
+	}
+	
+	public int getPosition() {
+		return position;
+	}
+	
 }
 
