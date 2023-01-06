@@ -24,6 +24,7 @@ class VisitorTest {
 		assertThat(expected2, is(0));
 	}
 
+	//TODO テーマパークコンストラクタ定義したらテストする
 	@Test
 	@DisplayName("行動")
 	void actTest() {

@@ -23,7 +23,7 @@ public abstract class ThemeParkNode {
 	
 	public abstract boolean hasEmpty();
 	
-	public abstract boolean canServe(Visitor visitor);
+	public abstract boolean canServe(int visitorId);
 	
 	public abstract void finishService();
 	

@@ -207,3 +207,11 @@ Visitorの行動とNodeの振る舞いを開発中
 #### TODO
 * 始点がrouteに含まれるため、４回実行してplanを繋げた時に終点(n回)と始点(n+1回)が重複する
     * n >= 2 のときは返却するList<> routeの[index=0]を消せばいい？
+   
+---
+    
+## 20230106
+### planSearchFeature
+#### 54ecc2a->
+#####　変更履歴
+* Attractionの待ち行列はVisitor型でなくint型(visitorId)での処理に変更
