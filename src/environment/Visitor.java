@@ -125,8 +125,8 @@ public class Visitor {
 		return tp.getNodeAt(position); 
 	}
 	
-	public List<Integer> planSearch() {
-		return device.searchPlan(this);
+	public List<Integer> planSearch(ThemePark tp) {
+		return device.searchPlan(tp, this);
 	}
 	
 	public int getPosition() {

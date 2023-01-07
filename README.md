@@ -215,3 +215,16 @@ Visitorの行動とNodeの振る舞いを開発中
 #### 54ecc2a->
 #####　変更履歴
 * Attractionの待ち行列はVisitor型でなくint型(visitorId)での処理に変更
+
+#### 882a171->
+##### 備忘録
+* [内部クラス概要](https://www.sejuku.net/blog/22637)
+* [内部クラスの種類](https://style.potepan.com/articles/30021.html#Java)
+    * あるクラス内のフィールド変数やメソッドにアクセスするクラスを宣言する場合に内部クラスとして宣言
+    * 外部クラスのフィールドやメソッドを「利用」は可能だが、「直接アクセス」できない
+    * databaseに使えるかと思ったけど微妙かも
+* 結局Deviceからのアクセスはtpを引数で渡すことにした
+
+##### 変更履歴
+* ダイクストラ法の処理をDeviceクラスに移動
+* ThemeParkのObserverインターフェース作成
