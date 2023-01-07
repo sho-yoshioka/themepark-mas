@@ -135,6 +135,15 @@ public class Visitor {
 	public int getId() {
 		return visitorId;
 	}
+	public EnumStatus getActStatus() {
+		return actStatus;
+	}
+	public int getRemainigTime() {
+		return remainingTime;
+	}
+	public List<Integer> getAttractionToVisit() {
+		return attractionToVisit;
+	}
 	
 }
 

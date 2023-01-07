@@ -228,3 +228,42 @@ Visitorの行動とNodeの振る舞いを開発中
 ##### 変更履歴
 * ダイクストラ法の処理をDeviceクラスに移動
 * ThemeParkのObserverインターフェース作成
+
+## 20230107
+### planSearchFeature
+#### 4ca0946->
+##### 備忘録
+> 20230106: Attractionの待ち行列はVisitor型でなくint型(visitorId)での処理に変更
+
+* Objectじゃなくintで渡す場合はremove()でアッパークラスにキャストしないとindexとして判断されてバグが起きる（修正済み）
+
+##### 変更履歴
+* Graph.java
+    * 新規作成
+    * Node/Edgeクラスはこちらで宣言
+    * dijkstra関係のメソッドをGraphのstaticメソッドに移動
+* Attraction.java
+    * waitingQueueの型をArrayDequeue -> LinkedList
+    * pqueueを取得するのにindexOf()が便利
+* Device.java
+    * デバイスごとに乱数をフィールドとして定義
+    * プランサーチを再現できるようにするため
+    * ユーザごとに乱数を持っているべきと考えた
+* ThemePark.java
+    * themeParkGraphのgetter()を定義
+    * 定数でもいい気もするが・・・
+* Visitor.java
+    * プランサーチで必要な変数のgetter()を定義
+        * 回るノードとか状態変数
+* SystemConst.java
+    * LOCALSEARCHの繰り返し回数
+* ThemeParkGraph.java
+    * Graaph/Edge/Node classを削除
+    * Graph.java を新規作成してそちらへ移動
+* Device.java
+    * 基礎的な処理を定義
+* CCEDevice.java
+    * CCEのコスト推定などを実装
+
+##### TODO
+* Device関連のテストケース作成

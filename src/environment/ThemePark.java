@@ -30,6 +30,9 @@ public class ThemePark {
 	public ThemeParkNode getNodeAt(int index) {
 		return themeParkNodes.get(index);
 	}
+	public ThemeParkGraph getThemeParkGraph() {
+		return themeParkGraph;
+	}
 	
 	/** Observer関連メソッド */
 	public void addObserver(Observer observer) {

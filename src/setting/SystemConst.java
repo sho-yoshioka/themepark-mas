@@ -24,4 +24,6 @@ public class SystemConst {
 	public static final double POISSON_RMD = 0.1;
 	public static final long ENT_SEED = 0;
 	public static final Random ENT_RND = new Random(ENT_SEED);
+	
+	public static final int LOCAL_SEARCH_TIMES = 15;
 }

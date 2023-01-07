@@ -1,130 +1,72 @@
 package environment;
 
 import java.util.List;
-import java.util.PriorityQueue;
+import java.util.Random;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public abstract class Device {
-	private List<Integer> ETA = new ArrayList<>();
-	public abstract double costEstimate(int nodeId, int time);
-	public abstract List<Integer> makeCandidatePlan(List<Integer> targetAttraction);
+	protected int ownerId;
+	protected List<Integer> ETA = new ArrayList<>();
+	protected Random planRnd;
+	
+	public Device(int userId) {
+		ownerId = userId;
+		planRnd = new Random(ownerId);
+	}
+	/**
+	 * evalPlan()の内部で繰り返し呼び出される。単体で使うことはない
+	 * @param nodeId 通過するコストを計算するノードのid
+	 * @param time ノードのコスト計算時点での到達予測時刻time^*
+	 * @param tp テーマパークインスタンス
+	 * @param visitor 呼び出しユーザ
+	 * @return Node[nodeId]を通過するのにかかるコスト
+	 */
+	public abstract int costEstimate(int nodeId, int time, ThemePark tp, Visitor visitor);
+	
+	/**
+	 * TODO W-SCEなら内部で予測移動時間などの要素を別で計算してutilityを演算して返す
+	 * 
+	 * searchPlan()内で呼び出される。
+	 * 終点ノードまでのETA[]をcostEstimate()を内部で呼び出して計算する。
+	 * @param plan 評価対象のプラン
+	 * @param tp テーマパークインスタンス
+	 * @param visitor 呼び出しユーザ
+	 * @return planの評価値(CCE,SCEの場合は滞在時間)
+	 */
+	public abstract double evalPlan(List<Integer> plan, ThemePark tp, Visitor visitor);
+	
+	/**
+	 * CCE: ローカルサーチでプランを探索
+	 * @param tp テーマパークインスタンス
+	 * @param visitor 利用ユーザ
+	 * @return 最も優れたプランのList<Integer>
+	 */
 	public abstract List<Integer> searchPlan(ThemePark tp, Visitor visitor);
-	public abstract int requestQueueLenghtAt(int nodeId);
 	
 	/**
-	 * prev[i] < 0 となるprev[source]まで実行する再帰関数
-	 * 呼び出し元のListに経由地をadd()する。dijkstra()で呼び出される
-	 * 
-	 * @param prev 最小距離を更新した際の経由地の配列
-	 * @param i 注目しているノード, 再帰関数でprev[i]とすることで経由地を
-	 * @param route 経由地リスト
+	 * returnするOrderとうけとるOrderは別インスタンス(参照わたしじゃない)
+	 * @param targetAttraction 変更前の元のアトラクション訪問順
+	 * @return 引数の訪問順のうち2点を入れ替えたList
 	 */
-	private static void getRoute(int[] prev, int i, List<Integer> route) {
-		if (i >= 0) {
-			getRoute(prev, prev[i], route);
-			route.add(i);
+	public List<Integer> swapTwoPoints(List<Integer> targetAttraction) {
+		List<Integer> attNewOrder = new ArrayList<>(targetAttraction);
+		//残りアトラクション2点未満の場合は入れ替えなく元のリストを返す
+		if (targetAttraction.size() < 2)
+			return targetAttraction;
+		
+		//残りアトラクションの数の重複なし乱数を取得して入れ替え
+		List<Integer> rndList = new ArrayList<>();
+		for (int i = 0; i < targetAttraction.size(); i++) {
+			rndList.add(i);
 		}
-	}
-	
-	/**
-	 * @param graph 探索するグラフ構造
-	 * @param source 経路探索の出発地点
-	 * @param n グラフの頂点の個数
-	 */
-	public static List<Integer> dijkstra(Graph graph, int source, int dest, int n) {
-		PriorityQueue<Node> minHeap;
-		//TotalFunctionインタフェースのapplyAsIntオーバーライドのラムダ形式でTotalFunctionをインスタンス化してるはず(20221227変更履歴を参照)
-		minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.weight));	
-		minHeap.add(new Node(source, 0));
-		
-		//ソースから'v'までの初期距離は無限大として設定
-		List<Integer> dist;
-		dist = new ArrayList<>(Collections.nCopies(n, Integer.MAX_VALUE));
-		dist.set(source, 0);
-		
-		//最小距離が確定したかどうか
-		boolean[] done = new boolean[n];
-		done[source] = true;
-		
-		//最小距離が確定した際の経由地を記録
-		int[] prev = new int[n];
-		prev[source] = -1;
-		
-		while (!minHeap.isEmpty()) {
-			//最小距離確定したノード
-			Node node = minHeap.poll();
-			int u = node.vertex;
-			
-			//探索目的の最短経路が確定した時点で終了
-			if(u == dest) break;
-			
-			//最小距離が確定したノード'u'の隣接ノード'v'に対して実行
-			for (Edge edge : graph.adjList.get(u)) {
-				int v = edge.dest;
-				int weight = edge.weight;
-				
-				//'u'を経由した際の'v'までの距離を計算、dist[v]と比較して最短経路を更新
-				if(!done[v] && dist.get(u) + weight < dist.get(v)) {
-					dist.set(v, dist.get(u) + weight);
-					prev[v] = u;
-					minHeap.add(new Node(v, dist.get(v)));
-				}
-			}
-			done[u] = true;
-		}
-		
-		List<Integer> route = new ArrayList<>();
-		
-		//'dest'までの経路をprev[]を使用して求める
-		if (dest != source && dist.get(dest) != Integer.MAX_VALUE) {
-			getRoute(prev, dest, route);
-			System.out.printf("Path (%d -> %d): Minimum cost = %d, Route = %s\n", source, dest, dist.get(dest), route);
-		}
-		return route;
-	}
-}
-
-
-class Edge {
-	int sorce, dest, weight;
-	
-	public Edge(int sorce, int dest, int weight) {
-		this.sorce = sorce;
-		this.dest = dest;
-		this.weight = weight;
-	}
-}
-
-
-class Node {
-	int vertex, weight;
-	
-	/**
-	 * 
-	 * @param vertex 頂点の通し番号
-	 * @param weight 確定した最短コスト
-	 */
-	public Node(int vertex, int weight) {
-		this.vertex = vertex;
-		this.weight = weight;
-	}
-}
-
-class Graph {
-	protected List<List<Edge>> adjList = null;
-	
-	protected Graph(List<Edge> edges, int n){
-		adjList = new ArrayList<>();
-		
-		for (int i = 0; i < n; i++) {
-			adjList.add(new ArrayList<>());
-		}
-		
-		for (Edge edge : edges) {
-			adjList.get(edge.sorce).add(edge);
-		}
+		Collections.shuffle(rndList, planRnd);
+		Integer index1 = rndList.get(0);
+		Integer index2 = rndList.get(1);
+		Integer tmp = attNewOrder.get(index1);
+		attNewOrder.set(index1, attNewOrder.get(index2));
+		attNewOrder.set(index2, tmp);
+		return attNewOrder;
 	}
 }

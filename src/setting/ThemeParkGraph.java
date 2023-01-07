@@ -1,11 +1,7 @@
 package setting;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class ThemeParkGraph extends Graph{
 	//コンストラクタ生成時に
@@ -40,47 +36,5 @@ public class ThemeParkGraph extends Graph{
 			new Edge(19, 5, 1),new Edge(19, 6, 1),new Edge(19, 16, 1),new Edge(19, 18, 1)
 		);
 		return edges;
-	}
-	
-}
-
-class Edge {
-	int sorce, dest, weight;
-	
-	public Edge(int sorce, int dest, int weight) {
-		this.sorce = sorce;
-		this.dest = dest;
-		this.weight = weight;
-	}
-}
-
-
-class Node {
-	int vertex, weight;
-	
-	/**
-	 * 
-	 * @param vertex 頂点の通し番号
-	 * @param weight 確定した最短コスト
-	 */
-	public Node(int vertex, int weight) {
-		this.vertex = vertex;
-		this.weight = weight;
-	}
-}
-
-class Graph {
-	protected List<List<Edge>> adjList = null;
-	
-	protected Graph(List<Edge> edges, int n){
-		adjList = new ArrayList<>();
-		
-		for (int i = 0; i < n; i++) {
-			adjList.add(new ArrayList<>());
-		}
-		
-		for (Edge edge : edges) {
-			adjList.get(edge.sorce).add(edge);
-		}
-	}
+	}	
 }

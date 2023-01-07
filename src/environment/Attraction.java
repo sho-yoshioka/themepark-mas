@@ -1,12 +1,11 @@
 package environment;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class Attraction extends ThemeParkNode {
-	private Queue<Integer> waitingQueue = new ArrayDeque<>();
+	private List<Integer> waitingQueue = new LinkedList<>();
 	private int operation;
 
 	public Attraction(int nodeId, int serviceTime, int capacity) {
@@ -34,7 +33,7 @@ public class Attraction extends ThemeParkNode {
 		List<Integer> visitors = new ArrayList<>(waitingQueue);
 		if (visitors.size() < end) end = visitors.size();
 		if (visitors.subList(0, end).contains(visitorId)) {
-			waitingQueue.remove(visitorId);
+			waitingQueue.remove((Integer)visitorId);
 			operation++;
 			return true;
 		}
@@ -50,4 +49,10 @@ public class Attraction extends ThemeParkNode {
 		operation--;
 	}
 
+	public int getQueueLength() {
+		return waitingQueue.size();
+	}
+	public int getPriorQueueLength(int visitorId) {
+		return waitingQueue.indexOf(visitorId);
+	}
 }
