@@ -1,12 +1,11 @@
 package environment;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class Attraction extends ThemeParkNode {
-	private Queue<Visitor> waitingQueue = new ArrayDeque<>();
+	private List<Integer> waitingQueue = new LinkedList<>();
 	private int operation;
 
 	public Attraction(int nodeId, int serviceTime, int capacity) {
@@ -26,22 +25,23 @@ public class Attraction extends ThemeParkNode {
 	}
 
 	@Override
-	public boolean canServe(Visitor visitor) {
+	public boolean canServe(int visitorId) {
+		//現在空いているサービスウィンド
 		int end = capacity - operation;
 		if (operation >= capacity) return false;
 		//待ち行列の先頭から空き人数分までのサブリストに含まれているか判定
-		List<Visitor> visitors = new ArrayList<>(waitingQueue);
+		List<Integer> visitors = new ArrayList<>(waitingQueue);
 		if (visitors.size() < end) end = visitors.size();
-		if (visitors.subList(0, end).contains(visitor)) {
-			waitingQueue.remove(visitor);
+		if (visitors.subList(0, end).contains(visitorId)) {
+			waitingQueue.remove((Integer)visitorId);
 			operation++;
 			return true;
 		}
 		return false;
 	}
 	
-	public void registerQueue(Visitor visitor) {
-		waitingQueue.add(visitor);
+	public void registerQueue(int visitorId) {
+		waitingQueue.add(visitorId);
 	}
 	
 	@Override
@@ -49,4 +49,10 @@ public class Attraction extends ThemeParkNode {
 		operation--;
 	}
 
+	public int getQueueLength() {
+		return waitingQueue.size();
+	}
+	public int getPriorQueueLength(int visitorId) {
+		return waitingQueue.indexOf(visitorId);
+	}
 }

@@ -16,7 +16,7 @@ public class Exit extends ThemeParkNode {
 	}
 
 	@Override
-	public boolean canServe(Visitor visitor) {
+	public boolean canServe(int visitorId) {
 		return false;
 	}
 	@Override

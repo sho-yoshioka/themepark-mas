@@ -26,13 +26,13 @@ class AttractionTest {
 		//行列は[0]~[19]まで並ぶ
 		for(int i = 0; i < 20; i++) {
 			vis[i] = new Visitor();
-			at.registerQueue(vis[i]);
+			at.registerQueue(vis[i].getId());
 		}
 		//行列埋まってるのでfalse
 		assertThat(at.hasEmpty(),is(false));
 		//サービス受けれるかチェック
 		for(int i = 0; i < 20; i++) {
-			result[i] = at.canServe(vis[i]);
+			result[i] = at.canServe(vis[i].getId());
 		}
 		//14枠が空いてるので[0]~[13]までtrue
 		assertThat(result,is(expected));

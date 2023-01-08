@@ -8,8 +8,12 @@ import setting.EnumStatus;
 import setting.SystemConst;
 
 public class Visitor {
+	private Device device;
+	
+	private int visitorId;
+	private static int visitorCount = 0;
 	/** 状態変数act()の条件分岐 */
-	private EnumStatus actStatus;
+	private EnumStatus actStatus = EnumStatus.INACTIVE;
 
 	/** time系 */
 	private int startTime;
@@ -24,7 +28,9 @@ public class Visitor {
 	private List<Integer> plan;
 	
 	public Visitor() {
-		//
+		visitorId = visitorCount;
+		visitorCount++;
+		device = new CCEDevice(visitorId);
 	}
 	public void act(ThemePark tp) {
 		ThemeParkNode currentNode = tp.getNodeAt(position);
@@ -48,7 +54,7 @@ public class Visitor {
 		
 		case WAITING:
 			waitingTime++;
-			if (currentNode.canServe(this)) {
+			if (currentNode.canServe(getId())) {
 				actStatus = EnumStatus.SERVED;
 				remainingTime = currentNode.getServiceTime();
 			}
@@ -59,7 +65,8 @@ public class Visitor {
 			if (remainingTime == 0) {
 				//TODO アトラクションの処理を別でやって更新した方がいいかも？間違ってたとしても1stepしかずれないから多分誤差
 				currentNode.finishService();
-				if (currentNode.getCapacity() == Integer.MAX_VALUE) movingTime += currentNode.getServiceTime();
+				if (currentNode.getCapacity() == Integer.MAX_VALUE) 
+					movingTime += currentNode.getServiceTime();
 				currentNode = move(tp);
 				if (position == SystemConst.EXIT) {
 					endTime = tp.getSimTime();
@@ -72,7 +79,7 @@ public class Visitor {
 						remainingTime = currentNode.getServiceTime();
 					} else {
 						//アトラクションノード待ち行列あり
-						((Attraction) currentNode).registerQueue(this);
+						((Attraction) currentNode).registerQueue(getId());
 						actStatus = EnumStatus.WAITING;
 					}
 				}
@@ -93,19 +100,19 @@ public class Visitor {
 	}
 	
 	public void initVisitor() {
-		setAttractionToVisit();
+		attractionToVisit = setAttractionToVisit();
 	}
 	
 	/**
-	 * 重複なしの乱数をListのshuffleで生成
+	 * 重複なしの乱数をListのshuffleで作成して訪問数分のサブリストを返す
 	 */
-	private void setAttractionToVisit() {
+	private List<Integer> setAttractionToVisit() {
 		List<Integer> attList = new ArrayList<>();
 		for (int i = 0; i < SystemConst.NUM_OF_ATTRACTION; i++) {
 			attList.add(i + 1);
 		}
 		Collections.shuffle(attList, SystemConst.DECIDE_ATT_RND);
-		attractionToVisit = new ArrayList<>(attList.subList(0, SystemConst.NUM_ATT_TO_VISIT));
+		return new ArrayList<>(attList.subList(0, SystemConst.NUM_ATT_TO_VISIT));
 	}
 	/**
 	 * act()で呼び出すprivate関数
@@ -119,12 +126,24 @@ public class Visitor {
 		return tp.getNodeAt(position); 
 	}
 	
-	public void planSearch(Device device) {
-		plan = device.searchPlan();
+	public void planSearch(ThemePark tp) {
+		plan = device.searchPlan(tp, this);
 	}
 	
 	public int getPosition() {
 		return position;
+	}
+	public int getId() {
+		return visitorId;
+	}
+	public EnumStatus getActStatus() {
+		return actStatus;
+	}
+	public int getRemainigTime() {
+		return remainingTime;
+	}
+	public List<Integer> getAttractionToVisit() {
+		return attractionToVisit;
 	}
 	
 }

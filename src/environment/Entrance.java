@@ -16,7 +16,7 @@ public class Entrance extends ThemeParkNode {
 	}
 
 	@Override
-	public boolean canServe(Visitor visitor) {
+	public boolean canServe(int visitorId) {
 		return true;
 	}
 	@Override

@@ -1,12 +1,14 @@
 package environment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import setting.NodeFactory;
 import setting.ThemeParkGraph;
 
 public class ThemePark {
+	private ArrayList<Observer> observers = new ArrayList<>();
 	private final ThemeParkGraph themeParkGraph;
 	private List<ThemeParkNode> themeParkNodes;
 	private List<Visitor> visitors;
@@ -28,4 +30,22 @@ public class ThemePark {
 	public ThemeParkNode getNodeAt(int index) {
 		return themeParkNodes.get(index);
 	}
+	public ThemeParkGraph getThemeParkGraph() {
+		return themeParkGraph;
+	}
+	
+	/** Observer関連メソッド */
+	public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+    public void deleteObserver(Observer observer) {
+        observers.remove(observer);
+    }
+    public void notifyObservers() {
+        Iterator<Observer> iterator = observers.iterator();
+        while (iterator.hasNext()) {
+            Observer observer = (Observer)iterator.next();
+            observer.update(this);
+        }
+    }
 }
