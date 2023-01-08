@@ -267,3 +267,35 @@ Visitorの行動とNodeの振る舞いを開発中
 
 ##### TODO
 * Device関連のテストケース作成
+
+## 20230108
+
+### planSearchFeature
+
+#### ca9db73->
+
+##### 備忘録
+* 配列のlastIndexはsize()-1なので注意。結構しょうもないミスが多かった（Graph.java)
+
+##### 変更履歴
+* CCEDevice.java
+    * EvalPlan()で返却する予測滞在時間に(-1)を乗じて返すことで効用の値が大きいほうが優れていると判断することにした
+    * CostEstimate()で入口でのコストをreturn0;
+        * actStatus == INACTIVEで判断すると無限ループする
+        * NodeId == ENTRANCEの判断に変更
+        * これでもt=simTのままなので条件分岐に入口でないINACTIVEは道路とした。
+    * searchPlan()は出口の際にreturn null;
+
+* Visitor.java
+    * actStatusの初期状態をINACETIVEで初期化
+    * planの更新をできてなかった。deviceに委譲して帰ってきたものをフィールドに代入するように変更(関数はvoidに)
+
+* Graph.java
+    * overlapIndexはsiza()でなくsize()-1が正しいので訂正
+    
+* CCEDeviceTest.java
+    * 全メソッドのテストを結果的にしたことになっている。
+    * ThemeParkのメソッドもいくつかユニットテストになってる
+    
+##### TODO
+* 回ったアトラクションはリストから消す(Visitor.act())　

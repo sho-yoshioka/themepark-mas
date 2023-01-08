@@ -13,7 +13,7 @@ public class Visitor {
 	private int visitorId;
 	private static int visitorCount = 0;
 	/** 状態変数act()の条件分岐 */
-	private EnumStatus actStatus;
+	private EnumStatus actStatus = EnumStatus.INACTIVE;
 
 	/** time系 */
 	private int startTime;
@@ -30,6 +30,7 @@ public class Visitor {
 	public Visitor() {
 		visitorId = visitorCount;
 		visitorCount++;
+		device = new CCEDevice(visitorId);
 	}
 	public void act(ThemePark tp) {
 		ThemeParkNode currentNode = tp.getNodeAt(position);
@@ -125,8 +126,8 @@ public class Visitor {
 		return tp.getNodeAt(position); 
 	}
 	
-	public List<Integer> planSearch(ThemePark tp) {
-		return device.searchPlan(tp, this);
+	public void planSearch(ThemePark tp) {
+		plan = device.searchPlan(tp, this);
 	}
 	
 	public int getPosition() {

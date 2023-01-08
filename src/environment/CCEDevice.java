@@ -16,7 +16,13 @@ public class CCEDevice extends Device {
 	@Override
 	public int costEstimate(int nodeId, int time, ThemePark tp, Visitor visitor) {
 		if (time == tp.getSimTime()) {
-			if (visitor.getActStatus() == EnumStatus.SERVED) {
+			if (nodeId == SystemConst.ENTRANCE ) {
+				return 0; 
+			}
+			//入口じゃなく、INACTIVEになるのは初期入場時のplan[1]のRoadのみ
+			if (visitor.getActStatus() == EnumStatus.INACTIVE) {
+				return tp.getNodeAt(nodeId).getServiceTime();
+			} else if (visitor.getActStatus() == EnumStatus.SERVED) {
 				return visitor.getRemainigTime();
 			} else {
 				Attraction attraction = ((Attraction)tp.getNodeAt(nodeId));
@@ -46,11 +52,14 @@ public class CCEDevice extends Device {
 		for (int i = 1; i < plan.size(); i++) {
 			ETA[i] = ETA[i-1]  + costEstimate(plan.get(i-1), ETA[i-1], tp, visitor);
 		}
-		return ETA[plan.size()];
+		return -ETA[plan.size() - 1];
 	}
 
 	@Override
 	public List<Integer> searchPlan(ThemePark tp, Visitor visitor) {
+		if (visitor.getActStatus() == EnumStatus.TERMINATED) {
+			return null;
+		}
 		int searchCount = 0;
 		List<Integer> candidateAttOrder = new ArrayList<>(visitor.getAttractionToVisit());
 		List<Integer> candidatePlan = Graph.allDijkstra(tp.getThemeParkGraph(), candidateAttOrder, visitor.getPosition(), SystemConst.GRAPH_SIZE);

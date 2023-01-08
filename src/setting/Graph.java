@@ -42,7 +42,7 @@ public class Graph {
 		//attraction[i]->attraction[i+1]　残り１つの場合は実行しない(上でやってる)
 		for (int i = 0; i < targetAttList.size() - 1; i++) {
 			//[0]->[1], [1]->[2]のように終点と始点が重複するので経路接続前に終点を消す
-			int overlapIndex = route.size();
+			int overlapIndex = route.size() - 1;
 			route.remove(overlapIndex);
 			int source = targetAttList.get(i);
 			int dest = targetAttList.get(i+1);
@@ -50,7 +50,7 @@ public class Graph {
 		}
 		//attraction[lastIndex] -> EXIT
 		int planLastIndex = targetAttList.size() - 1;
-		int overlapIndex = route.size();
+		int overlapIndex = route.size() - 1;
 		route.remove(overlapIndex);
 		route.addAll(dijkstra(graph, targetAttList.get(planLastIndex),SystemConst.EXIT, n));
 		return route;
