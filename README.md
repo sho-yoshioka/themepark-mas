@@ -312,3 +312,11 @@ Visitorの行動とNodeの振る舞いを開発中
 * ThemeParkTest.java
     * arriveVisitor()のテスト
     * ポアソン分布はok
+    
+---
+
+## 20230109
+### release-1.0
+#### 9975bc6->
+##### 変更履歴
+* bumped version number to 1.0
