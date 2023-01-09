@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args) {
 		//シミュレーション開始処理
 		//テーマパーク生成
-		ThemePark tp = null;
+		ThemePark tp = new ThemePark();
 		//ユーザ生成
 		//ノード生成
 		//アトラクション稼働
@@ -26,7 +26,7 @@ public class Main {
 		//for (int k = 0; k < 3; k++) {
 		//	attList.add(k + 1);
 		//}
-		
+		tp.arriveVisitor();
 		for(int i = 0; i< 10000000; i++) {
 			List<Integer> attList = new ArrayList<>();
 			for (int k = 0; k < 3; k++) {
