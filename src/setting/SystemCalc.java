@@ -15,8 +15,19 @@ public class SystemCalc {
 	}
 	
 	/** 単位時間あたりrmd回発生する事象が、単位時間の間にk回起こる確率を返す */
-	public double poisson(double rmd, int k) {
+	public static double poisson(double rmd, int k) {
 		return Math.pow(rmd, k) * Math.exp(-rmd) / factorial(k);
 	}
 
+	public static double[] poissonDis() {
+		double[] p = new double[12];
+		for(int i = 0; i < p.length; i++) {
+			if (i == 0) {
+				p[i] = poisson(SystemConst.POISSON_RMD, i);
+				continue;
+			}
+			p[i] = poisson(SystemConst.POISSON_RMD, i) + p[i-1];
+		}
+		return p;
+	}
 }

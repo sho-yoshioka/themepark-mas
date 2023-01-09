@@ -268,12 +268,11 @@ Visitorの行動とNodeの振る舞いを開発中
 ##### TODO
 * Device関連のテストケース作成
 
+---
+
 ## 20230108
-
 ### planSearchFeature
-
 #### ca9db73->
-
 ##### 備忘録
 * 配列のlastIndexはsize()-1なので注意。結構しょうもないミスが多かった（Graph.java)
 
@@ -291,7 +290,7 @@ Visitorの行動とNodeの振る舞いを開発中
     * planの更新をできてなかった。deviceに委譲して帰ってきたものをフィールドに代入するように変更(関数はvoidに)
 
 * Graph.java
-    * overlapIndexはsiza()でなくsize()-1が正しいので訂正
+    * overlapIndexはsize()でなくsize()-1が正しいので訂正
     
 * CCEDeviceTest.java
     * 全メソッドのテストを結果的にしたことになっている。
@@ -299,3 +298,17 @@ Visitorの行動とNodeの振る舞いを開発中
     
 ##### TODO
 * 回ったアトラクションはリストから消す(Visitor.act())　
+
+### userEnter
+#### b4ff31b->
+##### 変更履歴
+* SystemConst.java/SystemCalc.java
+    * poisson分布入場のために分布の配列を作成
+    
+* ThemePark.java
+    * arriveVisitor()
+        * poisson分布によってユーザの入場
+        
+* ThemeParkTest.java
+    * arriveVisitor()のテスト
+    * ポアソン分布はok
