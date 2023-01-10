@@ -298,6 +298,7 @@ Visitorの行動とNodeの振る舞いを開発中
     
 ##### TODO
 * 回ったアトラクションはリストから消す(Visitor.act())　
+    * 20230109実装
 
 ### userEnter
 #### b4ff31b->
@@ -320,3 +321,41 @@ Visitorの行動とNodeの振る舞いを開発中
 #### 9975bc6->
 ##### 変更履歴
 * bumped version number to 1.0
+
+#### 6868f61->
+##### 備忘録
+* 細かいテストはしていないが、一応sim()は回りそうな段階
+* statementの更新タイミングはいつがいいのか
+    * plan決定時にstatement送信でよさそう
+    * 前半のユーザはstatementが不正確の代わりに先に動ける
+    * 後半のユーザはstatementが正確の代わりに遅く動く
+    * アトラクション1つの場合考えるとこれであってそう
+* act()とplan()のタイミング
+    * plan()フェーズとact()フェーズは切り離すべき
+    * SCEなら各ユーザ行動がplan()->act()の単位の場合,statementに加えて行列長も大きくなってします
+    * CCEは本来行列の振動が起こるはずなので、plan()時では行列の更新はされていないと考えるのが普通
+    
+##### 変更履歴
+> 20230108
+> * 回ったアトラクションはリストから消す(Visitor.act())　
+
+* Visitor.java
+    * アトラクション削除move()内で実装
+    * initをコンストラクタで呼ぶように変更
+    * TERMINATEDに遷移する際にexit()でThemePark側の退場カウントを++;
+    * searchPlan()内でユーザが退場済みの際にnullを返していたが,呼び出し元のVisitor.planSearch()で処理
+* VisitorFactory.java
+    * 戻り値をArrayListに
+* NodeFactory.java
+    * 戻り値をArrayListに
+* CCEDevice.java
+    * searchPlan()内でユーザが退場済みの際にnullを返していたが,呼び出し元のVisitor.planSearch()で処理
+* ThemePark.java
+    * sim()の内部関数の実装
+* Main.java
+    * sim()のためインスタンス作成
+    
+##### TODO
+* `System.out.println()`の削除をしていく
+* release-1.0のリリース
+    

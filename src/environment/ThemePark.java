@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import setting.EnumStatus;
 import setting.SystemConst;
 import setting.ThemeParkGraph;
 
@@ -16,6 +17,7 @@ public class ThemePark {
 	private final ArrayList<Observer> observers = new ArrayList<>();
 	
 	private int entryCount = 0;
+	private int exitCount = 0;
 	private int simTime = 0;
 	
 	
@@ -25,7 +27,11 @@ public class ThemePark {
 		this.visitors = visitors;
 	}
 	
-	public void arriveVisitor() {
+	/**
+	 * [0.0,1.0)のdouble乱数を発生させポアソン分布に従った乱数(k回入場)を発生
+	 * entryCountがMAX_USERに到達するまで有効
+	 */
+	private void arriveVisitors() {
 		if (entryCount == SystemConst.MAX_USER) return;
 		double entval = SystemConst.ENT_RND.nextDouble();
 		String str = Arrays.toString(SystemConst.POISSON_DIS);
@@ -39,8 +45,40 @@ public class ThemePark {
 			entryCount++;
 		}
 	}
+	private void planVisitors() {
+		for (int i = 0; i < entryCount; i++) {
+			visitors.get(i).planSearch(this);
+		}
+	}
+	private void actVisitors() {
+		for (int i = 0; i < entryCount; i++) {
+			visitors.get(i).act(this);
+		}
+	}
+	public void exitVisitor() {
+		exitCount++;
+	}
+
+	public void simStep() {
+		arriveVisitors();
+		planVisitors();
+		actVisitors();
+		simTime++;
+	}
+	
 	public void sim() {
-		
+		System.out.println("SimStart(t = " + simTime + ")");
+		while(true) {
+			simStep();
+			System.out.println("Simstep(t = " + simTime + ")");
+			if (exitCount == SystemConst.MAX_USER) {
+				System.out.println("全ユーザが退場しました。");
+				break;
+			} else if (simTime == SystemConst.MAX_TIME) {
+				System.out.println("simTimeが" + simTime + "stepに到達したため強制終了");
+				break;
+			}
+		}
 	}
 	
 	/** getter関連メソッド */

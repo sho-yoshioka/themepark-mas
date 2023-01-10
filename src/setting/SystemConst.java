@@ -13,7 +13,7 @@ public class SystemConst {
 	public static final int NUM_OF_ATTRACTION = 10;
 	
 	/** シミュレーションの設定 */
-	public static final int MAX_USER = 5000;
+	public static final int MAX_USER = 1000;
 	public static final int MAX_TIME = 30000;
 	
 	public static final long DECIDE_ATT_SEED = 1;

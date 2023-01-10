@@ -1,5 +1,6 @@
 package setting;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import environment.Road;
 import environment.ThemeParkNode;
 
 public class NodeFactory {
-	public List<ThemeParkNode> initNode() {
+	public ArrayList<ThemeParkNode> initNode() {
 		List<ThemeParkNode> nodes = Arrays.asList(
 			new Entrance(),
 			new Attraction(1, 310),
@@ -34,7 +35,7 @@ public class NodeFactory {
 			new Road(19),
 			new Exit()
 		);
-		return nodes;
+		return new ArrayList<ThemeParkNode>(nodes);
 	}
 	
 }

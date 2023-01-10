@@ -57,9 +57,6 @@ public class CCEDevice extends Device {
 
 	@Override
 	public List<Integer> searchPlan(ThemePark tp, Visitor visitor) {
-		if (visitor.getActStatus() == EnumStatus.TERMINATED) {
-			return null;
-		}
 		int searchCount = 0;
 		List<Integer> candidateAttOrder = new ArrayList<>(visitor.getAttractionToVisit());
 		List<Integer> candidatePlan = Graph.allDijkstra(tp.getThemeParkGraph(), candidateAttOrder, visitor.getPosition(), SystemConst.GRAPH_SIZE);
