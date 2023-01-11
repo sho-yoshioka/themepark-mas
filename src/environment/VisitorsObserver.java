@@ -7,16 +7,17 @@ import java.util.Date;
 
 import setting.SystemConst;
 
-public class FileObserver implements Observer {
+public class VisitorsObserver implements Observer {
 
+	private Date date;
+	private String filePath = "./bin/results/";
 	private String filename;
 	private PrintWriter writer;
 	
-	@Override
-	public void update(ThemePark tp) {
-		Date date = new Date();
+	public VisitorsObserver() {
+		date = new Date();
 		String title = SystemConst.METHOD + "-" + SystemConst.MAX_USER + "_" + "SEED(" + SystemConst.SIM_SEED + ")";
-		filename = title + ".csv";
+		filename = filePath + title + ".csv";
 		try {
 			writer = new PrintWriter(new FileWriter(filename));
 		} catch (IOException e) {
@@ -24,9 +25,16 @@ public class FileObserver implements Observer {
 		}
 		makeTitle(title, date);
 		makeHeadline();
+	}
+	
+	@Override
+	public void update(ThemePark tp) {
+	}
+	
+	@Override
+	public void end(ThemePark tp) {
 		makeItems(tp);
 		close();
-		System.out.println(filename + "作成");
 	}
 	private void makeTitle(String title, Date date) {
 		writer.println(title);
@@ -55,5 +63,6 @@ public class FileObserver implements Observer {
 	}
 	private void close() {
 		writer.close();
+		System.out.println(filename + "作成");
 	}
 }

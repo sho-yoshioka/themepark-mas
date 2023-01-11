@@ -67,6 +67,7 @@ public class ThemePark {
 	public void simStep() {
 		arriveVisitors();
 		planVisitors();
+		notifyObservers();
 		actVisitors();
 		simTime++;
 	}
@@ -84,7 +85,7 @@ public class ThemePark {
 				break;
 			}
 		}
-		notifyObservers();
+		endObservers();
 	}
 	
 	/** getter関連メソッド */
@@ -116,6 +117,13 @@ public class ThemePark {
         while (iterator.hasNext()) {
             Observer observer = (Observer)iterator.next();
             observer.update(this);
+        }
+    }
+    public void endObservers() {
+        Iterator<Observer> iterator = observers.iterator();
+        while (iterator.hasNext()) {
+            Observer observer = (Observer)iterator.next();
+            observer.end(this);
         }
     }
 }

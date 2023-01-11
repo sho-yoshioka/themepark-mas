@@ -363,6 +363,8 @@ Visitorの行動とNodeの振る舞いを開発中
 ### release-1.0
 #### 796720a->
 ##### 備忘録
+* データ取るためのObserver作成
+
 ##### 変更履歴
 * SystemConst.java
     * POISSON_RMDをMAX_USER*0.0001で自動計算するように変更
@@ -380,3 +382,25 @@ Visitorの行動とNodeの振る舞いを開発中
     * ポアソン分布表示のためのprintln()削除（確認用に表示してただけ）
 * Main.java
     * observerの追加処理
+    
+#### cef06f5->
+##### 備忘録
+* Nodeの行列長を各tで取得するObserver追加
+* 各ConcreteObserverはコンストラクタでファイル作成処理
+* bin/resultsを作成し、そこを保存場所として`path`指定
+
+##### 変更履歴
+* Main.java
+    * NodeObserver追加
+* Observer.java
+    * `abstract end()`インターフェース定義（ファイルclose()などの終了処理のため）
+    * `update()`は`simStep()`で繰り返し、`end()`は`sim()`で一度呼び出す
+* NodeObserver.java(new)
+    * Attraction[i]の行列長を取得
+    * `update()`を`ThemePark.simStep()`ごとに呼び出す
+* VisitorObserver.java(new)
+    * FileObserverを名前変えただけ
+* ThemePark.java
+    * `endObserver()`の追加。最後に`sim()`で呼び出す
+    * `notifyObserver()`はユーザの行動前に呼び出す（t = ０〜退場時刻ー１）
+    
