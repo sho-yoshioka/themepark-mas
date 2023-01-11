@@ -122,7 +122,7 @@ public class Graph {
 		//'dest'までの経路をprev[]を使用して求める
 		if (dest != source && dist.get(dest) != Integer.MAX_VALUE) {
 			getRoute(prev, dest, route);
-			System.out.printf("Path (%d -> %d): Minimum cost = %d, Route = %s\n", source, dest, dist.get(dest), route);
+			//System.out.printf("Path (%d -> %d): Minimum cost = %d, Route = %s\n", source, dest, dist.get(dest), route);
 		}
 		return route;
 	}

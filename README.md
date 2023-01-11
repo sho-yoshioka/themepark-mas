@@ -298,6 +298,7 @@ Visitorの行動とNodeの振る舞いを開発中
     
 ##### TODO
 * 回ったアトラクションはリストから消す(Visitor.act())　
+    * 20230109実装
 
 ### userEnter
 #### b4ff31b->
@@ -312,3 +313,105 @@ Visitorの行動とNodeの振る舞いを開発中
 * ThemeParkTest.java
     * arriveVisitor()のテスト
     * ポアソン分布はok
+    
+---
+
+## 20230109
+### release-1.0
+#### 9975bc6->
+##### 変更履歴
+* bumped version number to 1.0
+
+#### 6868f61->
+##### 備忘録
+* 細かいテストはしていないが、一応sim()は回りそうな段階
+* statementの更新タイミングはいつがいいのか
+    * plan決定時にstatement送信でよさそう
+    * 前半のユーザはstatementが不正確の代わりに先に動ける
+    * 後半のユーザはstatementが正確の代わりに遅く動く
+    * アトラクション1つの場合考えるとこれであってそう
+* act()とplan()のタイミング
+    * plan()フェーズとact()フェーズは切り離すべき
+    * SCEなら各ユーザ行動がplan()->act()の単位の場合,statementに加えて行列長も大きくなってします
+    * CCEは本来行列の振動が起こるはずなので、plan()時では行列の更新はされていないと考えるのが普通
+    
+##### 変更履歴
+> 20230108
+> * 回ったアトラクションはリストから消す(Visitor.act())　
+
+* Visitor.java
+    * アトラクション削除move()内で実装
+    * initをコンストラクタで呼ぶように変更
+    * TERMINATEDに遷移する際にexit()でThemePark側の退場カウントを++;
+    * searchPlan()内でユーザが退場済みの際にnullを返していたが,呼び出し元のVisitor.planSearch()で処理
+* VisitorFactory.java
+    * 戻り値をArrayListに
+* NodeFactory.java
+    * 戻り値をArrayListに
+* CCEDevice.java
+    * searchPlan()内でユーザが退場済みの際にnullを返していたが,呼び出し元のVisitor.planSearch()で処理
+* ThemePark.java
+    * sim()の内部関数の実装
+* Main.java
+    * sim()のためインスタンス作成
+    
+##### TODO
+* `System.out.println()`の削除をしていく
+* release-1.0のリリース
+
+## 20230111
+### release-1.0
+#### 796720a->
+##### 備忘録
+* データ取るためのObserver作成
+
+##### 変更履歴
+* SystemConst.java
+    * POISSON_RMDをMAX_USER*0.0001で自動計算するように変更
+    * METHOD名を追加（後々はこれでDeviceを選択するようにプログラム改変）
+    * SIM_SEEDを追加して、各SEEDをこの値で初期化（それぞれの処理が一様分布ならSEED同じでも大丈夫と判断)
+        * だめそうならSEED+1,SEED+2で初期化する
+* FileObserver.java
+    * ThemeParkクラスのobserverでsim()が終わるとnotify()される。
+    * 各個人ユーザの結果をcsvファイルで出力
+* Graph.java
+    * route()のprint()をコメントアウト
+* Visitor.java
+    * Timeフィールドのgetterを追加(FileObserverのため)
+* ThemePark.java
+    * ポアソン分布表示のためのprintln()削除（確認用に表示してただけ）
+* Main.java
+    * observerの追加処理
+    
+#### cef06f5->
+##### 備忘録
+* Nodeの行列長を各tで取得するObserver追加
+* 各ConcreteObserverはコンストラクタでファイル作成処理
+* bin/resultsを作成し、そこを保存場所として`path`指定
+
+##### 変更履歴
+* Main.java
+    * NodeObserver追加
+* Observer.java
+    * `abstract end()`インターフェース定義（ファイルclose()などの終了処理のため）
+    * `update()`は`simStep()`で繰り返し、`end()`は`sim()`で一度呼び出す
+* NodeObserver.java(new)
+    * Attraction[i]の行列長を取得
+    * `update()`を`ThemePark.simStep()`ごとに呼び出す
+* VisitorObserver.java(new)
+    * FileObserverを名前変えただけ
+* ThemePark.java
+    * `endObserver()`の追加。最後に`sim()`で呼び出す
+    * `notifyObserver()`はユーザの行動前に呼び出す（t = ０〜退場時刻ー１）
+    
+#### 0e1bb84->
+##### 備忘録   
+* コメントの整理やフィールドを整えた
+* 結果ファイルの保存場所を./results/METHOD/MAX_USERに変更(bin/results/から）
+* ファイルパスを定数に
+##### 変更履歴
+* SystemConst.java
+    * filepath変更
+* <? implements Observer>
+    * filepathを定数から参照に変更歴
+ 

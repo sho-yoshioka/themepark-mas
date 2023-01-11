@@ -16,13 +16,17 @@ public class Visitor {
 	private EnumStatus actStatus = EnumStatus.INACTIVE;
 
 	/** time系 */
-	private int startTime;
+	private int startTime = 0;
 	private int endTime;
 	private int waitingTime = 0;
 	private int movingTime = 0;
 	private int travelTime = 0;
 	private int remainingTime;
 	
+	/** 
+	 * positionはThemeParkNodeで管理していないのは依存度を下げるため 
+	 * ThemeParkインスタンスにpositionを渡すことでNodeのメソッドを呼び出す
+	 */
 	private int position = -1;
 	private List<Integer> attractionToVisit;
 	private List<Integer> plan;
@@ -30,8 +34,58 @@ public class Visitor {
 	public Visitor() {
 		visitorId = visitorCount;
 		visitorCount++;
+		initVisitor();
 		device = new CCEDevice(visitorId);
 	}
+	
+	/** getter メソッド ~~~ */
+	public int getPosition() {
+		return position;
+	}
+	public int getId() {
+		return visitorId;
+	}
+	public EnumStatus getActStatus() {
+		return actStatus;
+	}
+	public int getwaitingTime() {
+		return waitingTime;
+	}
+	public int getMovingTime() {
+		return movingTime;
+	}
+	public int getTravelTime() {
+		return travelTime;
+	}
+	public int getRemainigTime() {
+		return remainingTime;
+	}
+	public List<Integer> getAttractionToVisit() {
+		return attractionToVisit;
+	}
+	/** ~~~ getter メソッド */
+	
+	
+	/**
+	 * act()で呼び出すprivate関数
+	 * プランが示す次ノードにpositionを移動し、移動前のノードをプランから除く。
+	 * 移動先アトラクションの場合はリストから消す
+	 * @param tp ThemeParkのインスタンス
+	 * @return 移動先のThemeParkNode
+	 */
+	private ThemeParkNode move(ThemePark tp) {
+		position = plan.get(1);
+		if (attractionToVisit.contains((Integer)position)) {
+			attractionToVisit.remove((Integer)position);
+		}
+		plan.remove(0);
+		return tp.getNodeAt(position); 
+	}
+	
+	/**
+	 * 
+	 * @param tp
+	 */
 	public void act(ThemePark tp) {
 		ThemeParkNode currentNode = tp.getNodeAt(position);
 		switch(actStatus) {
@@ -65,13 +119,16 @@ public class Visitor {
 			if (remainingTime == 0) {
 				//TODO アトラクションの処理を別でやって更新した方がいいかも？間違ってたとしても1stepしかずれないから多分誤差
 				currentNode.finishService();
-				if (currentNode.getCapacity() == Integer.MAX_VALUE) 
+				if (currentNode.getCapacity() == Integer.MAX_VALUE) {
 					movingTime += currentNode.getServiceTime();
+				}
 				currentNode = move(tp);
 				if (position == SystemConst.EXIT) {
 					endTime = tp.getSimTime();
 					travelTime = endTime - startTime;
 					actStatus = EnumStatus.TERMINATED;
+					System.out.println("VisitorID [" + visitorId + "] が退場");
+					exit(tp);
 				} else {
 					//Roadノードorアトラクション待ち行列なし
 					if (currentNode.hasEmpty()) {
@@ -92,15 +149,15 @@ public class Visitor {
 		}
 	}
 	/** 
-	 * 操作側から呼び出すメソッド 
+	 * 操作側(ThemePark.sim())から呼び出すメソッド 
 	 * 分布に従って入場
 	 * */
 	public void enter() {
 		position = SystemConst.ENTRANCE;
+		System.out.println("VisitorID [" + visitorId + "] が入場");
 	}
-	
-	public void initVisitor() {
-		attractionToVisit = setAttractionToVisit();
+	public void exit(ThemePark tp) {
+		tp.exitVisitor();
 	}
 	
 	/**
@@ -114,36 +171,16 @@ public class Visitor {
 		Collections.shuffle(attList, SystemConst.DECIDE_ATT_RND);
 		return new ArrayList<>(attList.subList(0, SystemConst.NUM_ATT_TO_VISIT));
 	}
-	/**
-	 * act()で呼び出すprivate関数
-	 * プランが示す次ノードにpositionを移動し、移動前のノードをプランから除く。
-	 * @param tp ThemeParkのインスタンス
-	 * @return 移動先のThemeParkNode
-	 */
-	private ThemeParkNode move(ThemePark tp) {
-		position = plan.get(1);
-		plan.remove(0);
-		return tp.getNodeAt(position); 
+	
+	public void initVisitor() {
+		attractionToVisit = setAttractionToVisit();
 	}
 	
 	public void planSearch(ThemePark tp) {
-		plan = device.searchPlan(tp, this);
-	}
-	
-	public int getPosition() {
-		return position;
-	}
-	public int getId() {
-		return visitorId;
-	}
-	public EnumStatus getActStatus() {
-		return actStatus;
-	}
-	public int getRemainigTime() {
-		return remainingTime;
-	}
-	public List<Integer> getAttractionToVisit() {
-		return attractionToVisit;
+		if (actStatus == EnumStatus.TERMINATED) return;
+		if (startTime == 0 || (tp.getSimTime() - startTime) % SystemConst.VISITOR_PLANNING_INTERVAL == 0) {
+			plan = device.searchPlan(tp, this);
+		}
 	}
 	
 }
