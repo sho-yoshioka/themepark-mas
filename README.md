@@ -358,4 +358,25 @@ Visitorの行動とNodeの振る舞いを開発中
 ##### TODO
 * `System.out.println()`の削除をしていく
 * release-1.0のリリース
-    
+
+## 20230111
+### release-1.0
+#### 796720a->
+##### 備忘録
+##### 変更履歴
+* SystemConst.java
+    * POISSON_RMDをMAX_USER*0.0001で自動計算するように変更
+    * METHOD名を追加（後々はこれでDeviceを選択するようにプログラム改変）
+    * SIM_SEEDを追加して、各SEEDをこの値で初期化（それぞれの処理が一様分布ならSEED同じでも大丈夫と判断)
+        * だめそうならSEED+1,SEED+2で初期化する
+* FileObserver.java
+    * ThemeParkクラスのobserverでsim()が終わるとnotify()される。
+    * 各個人ユーザの結果をcsvファイルで出力
+* Graph.java
+    * route()のprint()をコメントアウト
+* Visitor.java
+    * Timeフィールドのgetterを追加(FileObserverのため)
+* ThemePark.java
+    * ポアソン分布表示のためのprintln()削除（確認用に表示してただけ）
+* Main.java
+    * observerの追加処理

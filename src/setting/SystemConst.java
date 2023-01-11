@@ -13,16 +13,18 @@ public class SystemConst {
 	public static final int NUM_OF_ATTRACTION = 10;
 	
 	/** シミュレーションの設定 */
-	public static final int MAX_USER = 1000;
-	public static final int MAX_TIME = 30000;
+	public static final int MAX_USER = 5000;
+	public static final int MAX_TIME = 50000;
+	public static final int SIM_SEED = 0;
+	public static final String METHOD = "CCE";
 	
-	public static final long DECIDE_ATT_SEED = 1;
+	public static final long DECIDE_ATT_SEED = SIM_SEED;
 	public static final int NUM_ATT_TO_VISIT = 4;
 	public static final Random DECIDE_ATT_RND = new Random(DECIDE_ATT_SEED);
 	
 	/** ポアソン分布に従った入場で使う乱数とパラメータ */
-	public static final double POISSON_RMD = 0.1;
-	public static final long ENT_SEED = 0;
+	public static final double POISSON_RMD = 0.0001 * MAX_USER;
+	public static final long ENT_SEED = SIM_SEED;
 	public static final Random ENT_RND = new Random(ENT_SEED);
 	public static final double[] POISSON_DIS = SystemCalc.poissonDis();
 	

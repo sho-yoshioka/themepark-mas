@@ -34,9 +34,6 @@ public class ThemePark {
 	private void arriveVisitors() {
 		if (entryCount == SystemConst.MAX_USER) return;
 		double entval = SystemConst.ENT_RND.nextDouble();
-		String str = Arrays.toString(SystemConst.POISSON_DIS);
-		System.out.println(str);
-		System.out.println(entval);
 		for (int i = 0; i < SystemConst.POISSON_DIS.length; i++) {
 			if (entval < SystemConst.POISSON_DIS[i]) {
 				break;
@@ -45,16 +42,24 @@ public class ThemePark {
 			entryCount++;
 		}
 	}
+	
+	/** 入場済みのユーザが順番にplanSearch() */
 	private void planVisitors() {
 		for (int i = 0; i < entryCount; i++) {
 			visitors.get(i).planSearch(this);
 		}
 	}
+	
+	/** 入場済みのユーザが順番に行動act() */
 	private void actVisitors() {
 		for (int i = 0; i < entryCount; i++) {
 			visitors.get(i).act(this);
 		}
 	}
+	/** 
+	 * visitorから呼び出される関数。退場のnotify()
+	 * 毎回EnumStatus.TERMINATEDの人数を数えればテーマパーク側だけで完結はするが、処理無駄な気がするからこうしてる
+	 */
 	public void exitVisitor() {
 		exitCount++;
 	}
@@ -67,10 +72,10 @@ public class ThemePark {
 	}
 	
 	public void sim() {
-		System.out.println("SimStart(t = " + simTime + ")");
+		//System.out.println("SimStart(t = " + simTime + ")");
 		while(true) {
 			simStep();
-			System.out.println("Simstep(t = " + simTime + ")");
+			//System.out.println("Simstep(t = " + simTime + ")");
 			if (exitCount == SystemConst.MAX_USER) {
 				System.out.println("全ユーザが退場しました。");
 				break;
@@ -79,6 +84,7 @@ public class ThemePark {
 				break;
 			}
 		}
+		notifyObservers();
 	}
 	
 	/** getter関連メソッド */
@@ -92,6 +98,10 @@ public class ThemePark {
 	
 	public ThemeParkNode getNodeAt(int index) {
 		return themeParkNodes.get(index);
+	}
+	
+	public Visitor getVisitorAt(int index) {
+		return visitors.get(index);
 	}
 	
 	/** Observer関連メソッド */

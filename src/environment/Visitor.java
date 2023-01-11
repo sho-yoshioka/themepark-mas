@@ -44,6 +44,15 @@ public class Visitor {
 	public EnumStatus getActStatus() {
 		return actStatus;
 	}
+	public int getwaitingTime() {
+		return waitingTime;
+	}
+	public int getMovingTime() {
+		return movingTime;
+	}
+	public int getTravelTime() {
+		return travelTime;
+	}
 	public int getRemainigTime() {
 		return remainingTime;
 	}

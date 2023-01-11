@@ -1,11 +1,8 @@
 package environment;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import setting.NodeFactory;
-import setting.SystemConst;
 import setting.ThemeParkGraph;
 import setting.VisitorFactory;
 
@@ -20,6 +17,8 @@ public class Main {
 		List<Visitor> visitors = visitorFactory.initVisitor();
 		//テーマパーク生成
 		ThemePark tp = new ThemePark(tpg, nodes, visitors);
+		Observer fObserver = new FileObserver();
+		tp.addObserver(fObserver);
 		//ユーザプランニング
 		//ユーザ行動
 		tp.sim();
