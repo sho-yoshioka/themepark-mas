@@ -404,3 +404,14 @@ Visitorの行動とNodeの振る舞いを開発中
     * `endObserver()`の追加。最後に`sim()`で呼び出す
     * `notifyObserver()`はユーザの行動前に呼び出す（t = ０〜退場時刻ー１）
     
+#### 0e1bb84->
+##### 備忘録   
+* コメントの整理やフィールドを整えた
+* 結果ファイルの保存場所を./results/METHOD/MAX_USERに変更(bin/results/から）
+* ファイルパスを定数に
+##### 変更履歴
+* SystemConst.java
+    * filepath変更
+* <? implements Observer>
+    * filepathを定数から参照に変更歴
+ 

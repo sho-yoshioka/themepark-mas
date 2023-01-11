@@ -10,20 +10,19 @@ import setting.SystemConst;
 public class NodesObserver implements Observer {
 
 	private Date date;
-	private String filePath = "./bin/results/";
 	private String filename;
 	private PrintWriter writer;
 	
 	public NodesObserver() {
 		date = new Date();
 		String title = SystemConst.METHOD + "-" + SystemConst.MAX_USER + "-Queue_" + "SEED(" + SystemConst.SIM_SEED + ")";
-		filename = filePath + title + ".csv";
+		filename = SystemConst.FILE_PATH + title + ".csv";
 		try {
 			writer = new PrintWriter(new FileWriter(filename));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		makeTitle(title, date);
+		makeTitle(date, title);
 		makeHeadline();
 	}
 	@Override
@@ -34,10 +33,16 @@ public class NodesObserver implements Observer {
 	public void end(ThemePark tp) {
 		close();
 	}
-	private void makeTitle(String title, Date date) {
-		writer.println(title);
+	/**
+	 * 1,2行目に記載
+	 * @param title ファイルのタイトル
+	 * @param date ファイル作成日時
+	 */
+	private void makeTitle(Date date, String title) {
 		writer.println(date);
+		writer.println(title);
 	}
+	/** csvファイルの先頭行を作成. time, Att[1]~Att[10] */
 	private void makeHeadline() {
 		writer.print("simulationTime,");
 		for(int i = 0; i < SystemConst.NUM_OF_ATTRACTION; i++) {
@@ -45,6 +50,10 @@ public class NodesObserver implements Observer {
 		}
 		writer.print("\n");
 	}
+	/**
+	 * simulationTimeとAttractionのqueueLengthを記録していく
+	 * @param tp 観測対象のテーマパークインスタンス
+	 */
 	private void makeItems(ThemePark tp) {
 		int simT = tp.getSimTime();
 		writer.print(simT + ",");
@@ -55,6 +64,7 @@ public class NodesObserver implements Observer {
 		}	
 		writer.print("\n");
 	}
+	/** ファイルの終了処理 */
 	private void close() {
 		writer.close();
 		System.out.println(filename + "作成");

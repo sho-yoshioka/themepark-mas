@@ -8,7 +8,6 @@ import setting.VisitorFactory;
 
 public class Main {
 	public static void main(String[] args) {
-		//シミュレーション開始処理
 		//テーマパーク要素生成
 		ThemeParkGraph tpg = new ThemeParkGraph();
 		NodeFactory nodeFactory = new NodeFactory();
@@ -17,11 +16,11 @@ public class Main {
 		List<Visitor> visitors = visitorFactory.initVisitor();
 		//テーマパーク生成
 		ThemePark tp = new ThemePark(tpg, nodes, visitors);
+		//Observersの作成・追加
 		Observer visitorsObserver = new VisitorsObserver();
 		Observer nodesObserver = new NodesObserver();
 		tp.addObserver(visitorsObserver);
 		tp.addObserver(nodesObserver);
-		//ユーザプランニング
 		//ユーザ行動
 		tp.sim();
 	}

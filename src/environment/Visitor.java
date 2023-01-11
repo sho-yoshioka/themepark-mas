@@ -23,6 +23,10 @@ public class Visitor {
 	private int travelTime = 0;
 	private int remainingTime;
 	
+	/** 
+	 * positionはThemeParkNodeで管理していないのは依存度を下げるため 
+	 * ThemeParkインスタンスにpositionを渡すことでNodeのメソッドを呼び出す
+	 */
 	private int position = -1;
 	private List<Integer> attractionToVisit;
 	private List<Integer> plan;

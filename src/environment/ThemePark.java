@@ -1,25 +1,23 @@
 package environment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import setting.EnumStatus;
 import setting.SystemConst;
 import setting.ThemeParkGraph;
 
 public class ThemePark {
+	/** ThemeParkの設定 */
 	private final ThemeParkGraph themeParkGraph;
 	private final List<ThemeParkNode> themeParkNodes;
 	private final List<Visitor> visitors;
 	
 	private final ArrayList<Observer> observers = new ArrayList<>();
 	
-	private int entryCount = 0;
+	private int entryCount = 0;	
 	private int exitCount = 0;
 	private int simTime = 0;
-	
 	
 	public ThemePark(ThemeParkGraph themeParkGraph, List<ThemeParkNode> themeParkNodes, List<Visitor> visitors) {
 		this.themeParkGraph = themeParkGraph;
@@ -57,13 +55,14 @@ public class ThemePark {
 		}
 	}
 	/** 
-	 * visitorから呼び出される関数。退場のnotify()
-	 * 毎回EnumStatus.TERMINATEDの人数を数えればテーマパーク側だけで完結はするが、処理無駄な気がするからこうしてる
+	 * visitorから呼び出される関数.退場のcountをする.
+	 * 毎回EnumStatus.TERMINATEDの人数を数えればテーマパーク側だけで完結はするが、処理無駄な気がするからこうしてる.
 	 */
 	public void exitVisitor() {
 		exitCount++;
 	}
 
+	/** simulationの1step. 入場〜プランニング〜通知〜行動を入場済みユーザに対して行う */
 	public void simStep() {
 		arriveVisitors();
 		planVisitors();
@@ -72,6 +71,10 @@ public class ThemePark {
 		simTime++;
 	}
 	
+	/** 
+	 * 全ユーザが退場するまでsimStep()を繰り返す.
+	 * 最後に記録を取るため・終了処理としてendObservers()を呼び出す.
+	 */
 	public void sim() {
 		//System.out.println("SimStart(t = " + simTime + ")");
 		while(true) {
